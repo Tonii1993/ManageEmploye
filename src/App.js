@@ -7,11 +7,12 @@ function App() {
     <>
       <div className="container-xl">
         <div className="table-responsive">
-          <div className="table-wrapper"></div>
+          <div className="table-wrapper">
+            <EmployeeContextProvider>
+              <EmployeeList />
+            </EmployeeContextProvider>
+          </div>
         </div>
-        <EmployeeContextProvider>
-          <EmployeeList />
-        </EmployeeContextProvider>
       </div>
     </>
   );
