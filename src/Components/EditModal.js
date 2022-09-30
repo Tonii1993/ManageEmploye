@@ -1,27 +1,27 @@
-import React from "react";
+import React from 'react';
 import { Button, Modal } from "react-bootstrap";
-import AddForm from "./AddForm";
+import EditForm from './EditForm';
 
-function ModalEmp({show, handleClose}) {
+
+function EditModal({theemployee, handleClose, show}) {
 
   return (
     <>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Employee</Modal.Title>
+          <Modal.Title>Edit Employee</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          <AddForm />
+          <EditForm theEmployee={theemployee} />
         </Modal.Body>
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>Close</Button>
-          {/* <Button variant="primary" onClick={props.handleSubmit}>Update</Button> */}
-        </Modal.Footer>
+         </Modal.Footer>
       </Modal>
     </>
-  );
+  )
 }
 
-export default ModalEmp;
+export default EditModal;

@@ -2,22 +2,53 @@ import Employee from "./Employee";
 import { useContext, useState, useEffect } from "react";
 import { EmployeeContext } from "../contexts/EmployeeContext";
 import ModalEmp from "./ModalEmp";
-import { Button } from "react-bootstrap";
-
+import { Button, Alert } from "react-bootstrap";
+import Pagination from "./Pagination";
 
 const EmployeeList = () => {
-  const { employees } = useContext(EmployeeContext);
-  //console.log(employees);
-  const[show, setShow] = useState(false);
+  const { sortedEmployees } = useContext(EmployeeContext);
+
+  const [showAlert, setShowAlert] = useState(false);
+  console.log(showAlert);
+  const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    handleClose()
-  },[employees])
+  const [currentPage, setCurrentPage] = useState(1);
+  const [employeesPerPage] = useState(2);
 
-console.log('employeees ndryshoiiiiii', employees);
+  const handleShowAlert = () => {
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
+  };
+
+  console.log("sorted", sortedEmployees);
+
+  useEffect(() => {
+    handleClose();
+
+    return () => {
+      console.log("deleteddddddd");
+      handleShowAlert();
+
+      return () => {
+        handleShowAlert()
+      }}
+  }, [ sortedEmployees.length ]);
+  console.log("alertiiiii", showAlert);
+
+  const indexOfLastEmployee = currentPage * employeesPerPage;
+  const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
+  const currentEmployees = sortedEmployees.slice(
+    indexOfFirstEmployee,
+    indexOfLastEmployee
+  );
+  const totalPageNum = Math.ceil(sortedEmployees.length / employeesPerPage);
+
+  // console.log('employeees ndryshoiiiiii', employees);
   return (
     <>
       <div className="table-title">
@@ -39,6 +70,9 @@ console.log('employeees ndryshoiiiiii', employees);
           </div>
         </div>
       </div>
+      <Alert show={showAlert} variant="success">
+        <span>You Add an Employee Succesfully!!!!!</span>
+      </Alert>
       <table className="table table-striped table-hover">
         <thead>
           <tr>
@@ -50,7 +84,7 @@ console.log('employeees ndryshoiiiiii', employees);
           </tr>
         </thead>
         <tbody>
-          {employees.map((employee) => (
+          {currentEmployees.map((employee) => (
             <tr key={employee.id}>
               <Employee employee={employee} />
             </tr>
@@ -58,6 +92,12 @@ console.log('employeees ndryshoiiiiii', employees);
           <ModalEmp show={show} handleClose={handleClose} />
         </tbody>
       </table>
+      <Pagination
+        pages={totalPageNum}
+        setCurrentpage={setCurrentPage}
+        currentEmployees={currentEmployees}
+        sortedEmployees={sortedEmployees}
+      />
     </>
   );
 };
